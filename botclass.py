@@ -33,3 +33,15 @@ class TelBotClass(object):
 
         except:
             return None
+
+
+        def getUpdate(self, data):
+            pass
+
+
+        def getChat(self, update):
+            pass
+
+
+        def sendMessage(self, chat_id, text):
+            pass
