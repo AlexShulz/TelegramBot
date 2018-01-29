@@ -40,27 +40,36 @@ class TelBotClass(object):
             return None
 
 
-    def getUpdate(self, data):
-        pass
+    def setWebhook(self, url, **kwargs):
+        data={
+        'url': url
+        }
+        try:
+            self._request = requests.post(self._url + '/setWebhook',
+                                          data=data)
+            return True
+        except:
+            return False
 
-
-    def setWebhook(self):
-        pass
 
 
     def deleteWebhook(self):
-        pass
+        try:
+            self._request = requests.get(self._url + '/deleteWebhook')
+            return True
+        except:
+            return False
 
 
     def getWebhookInfo(self):
-        pass
+        try:
+            self._request = requests.get(self._url + '/getWebhookInfo')
+            return self._request
+        except:
+            return None
 
 
-    def WebhookInfo(self):
-        pass
-
-
-    def sendMessage(self, chat_id, text):
+    def sendMessage(self, chat_id, text, **kwargs):
         param = {
         'chat_id': chat_id,
         'text': text
