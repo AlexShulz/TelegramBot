@@ -44,20 +44,6 @@ class TelBotClass(object):
         pass
 
 
-    def getChat(self, update):
-        pass
-
-
-    def sendMessage(self, chat_id, text):
-        param = {
-        'chat_id': chat_id,
-        'text': text
-        }
-        self._response = requests.post(self._url
-                                       + '/sendMessage', data=param)
-        return self._response
-
-
     def setWebhook(self):
         pass
 
@@ -71,4 +57,152 @@ class TelBotClass(object):
 
 
     def WebhookInfo(self):
+        pass
+
+
+    def sendMessage(self, chat_id, text):
+        param = {
+        'chat_id': chat_id,
+        'text': text
+        }
+        self._response = requests.post(self._url
+                                       + '/sendMessage', data=param)
+        return self._response
+
+
+    def forwaedMessage(self, chat_id,from_chat_id,
+                       message_id, disable_notification=True):
+        pass
+
+
+    def sendPhoto(self, chat_id, photo, **kwargs):
+        pass
+
+
+    def sendAudio(self, chat_id, audio, **kwargs):
+        pass
+
+
+    def sendDocument(self, chat_id, document, **kwargs):
+        pass
+
+
+    def sendVideo(self,chat_id, video, **kwargs):
+        pass
+
+
+    def sendVoice(self, chat_id, voice, **kwargs):
+        pass
+
+
+    def sendVideoNote(self, chat_id, vnote, **kwargs):
+        pass
+
+
+    def sendMediaGroup(self, chat_id, media, **kwargs):
+        pass
+
+
+    def sendLocation(self, latitude, longtitude, **kwargs):
+        pass
+
+
+    def editMessageLiveLocation(self, chat_id, latitude, longtitude, **kwargs):
+        pass
+
+
+    def stopMessageLiveLocation(self, chat_id, **kwargs):
+        pass
+
+
+    def sendVenue(self, chat_id, latitude, longtitude, title, address, **kwargs):
+        pass
+
+
+    def sendCOntact(self, chat_id, phone_num, first_name, **kwargs):
+        pass
+
+
+    def sendChatAction(self, chat_id, action):
+        pass
+
+
+    def getUserProfilePhotos(self, user_id, **kwargs):
+        pass
+
+
+    def kickChatMember(self, chat_id, user_id, until_date=None):
+        pass
+
+
+    def unbanChatMember(self, chat_id, user_id):
+        pass
+
+
+    def restrictChatMember(self, chat_id, user_id, **kwargs):
+        pass
+
+    def promoteChatMember(self, chat_id, user_id, **kwargs):
+        pass
+
+
+    def exportChatInviteLink(self, chat_id):
+        pass
+
+
+    def setChatPhoto(self, chat_id, chat_photo):
+        pass
+
+
+    def deleteChatPhoto(self, chat_id):
+        pass
+
+
+    def setChatTitle(self, chat_id, title):
+        pass
+
+
+    def setChatDescription(self, chat_id, message_id,
+                           disable_notification=True):
+        pass
+
+
+    def pinChatMessage(self, chat_id, message_id,
+                       disable_notification=True):
+        pass
+
+
+    def unpinChatMessage(self, chat_id):
+        pass
+
+
+    def leaveChat(self, chat_id):
+        pass
+
+
+    def getChat(self, chat_id):
+        pass
+
+
+    def getChatAdministrators(self, chat_id):
+        pass
+
+
+    def getChatMembersCount(self, chat_id):
+        pass
+
+
+    def getChatMember(self, chat_id, member_id):
+        pass
+
+
+    def setChatStickerSet(self, chat_id, sticker_set_name):
+        pass
+
+
+    def deleteChatStickerSet(self, chat_id):
+        pass
+
+
+    def answerCallbackQuery(self, callback_query_id, **kwargs):
         pass
