@@ -11,18 +11,14 @@ class TelBotClass(object):
     def __init__(self, token):
         self._token = token
         self._url = "https://api.telegram.org/bot" + self._token
-        self._offset = 0
-        self._timeout = 0
-        self._limit = 0
 
 
     def getUpdates(self, **kwargs):
-        if 'offset' in kwargs.keys():
-            self._offset = kwargs['offset']
-        if 'timeout' in kwargs.keys():
-            self._timeout = kwargs['timeout']
-        if 'limit' in kwargs.keys():
-            self._limit = kwargs['limit']
+        """Get new incoming messages from bot"""
+        self._offset = kwargs.get('offset', 0)
+        self._timeout = kwargs.get('timeout', 0)
+        self._limit = kwargs.get('limit', 0)
+
         data = {
         'offset': self._offset,
         'limit': self._limit,
@@ -45,8 +41,7 @@ class TelBotClass(object):
         'url': url
         }
         try:
-            self._request = requests.post(self._url + '/setWebhook',
-                                          data=data)
+            requests.post(self._url + '/setWebhook', data=data)
             return True
         except:
             return False
@@ -54,14 +49,16 @@ class TelBotClass(object):
 
 
     def deleteWebhook(self):
+        """Try to delete Webhook. If success returns True, else returns False"""
         try:
             self._request = requests.get(self._url + '/deleteWebhook')
             return True
         except:
             return False
 
-
+    @property
     def getWebhookInfo(self):
+        """Get information about webhook"""
         try:
             self._request = requests.get(self._url + '/getWebhookInfo')
             return self._request
@@ -70,13 +67,18 @@ class TelBotClass(object):
 
 
     def sendMessage(self, chat_id, text, **kwargs):
+        """ Sending a message from bot to specified chat """
         param = {
         'chat_id': chat_id,
         'text': text
         }
-        self._response = requests.post(self._url
-                                       + '/sendMessage', data=param)
-        return self._response
+
+        try:
+            self._response = requests.post(self._url
+                                           + '/sendMessage', data=param)
+            return self._response
+        except:
+            return None
 
 
     def forwaedMessage(self, chat_id,from_chat_id,
