@@ -73,41 +73,154 @@ class TelBotClass(object):
         'text': text
         }
 
+        self._response = requests.post(self._url
+                                       + '/sendMessage', data=param)
+        return self._response
+
+
+    def forwardMessage(self, chat_id,from_chat_id,
+                       message_id, disable_notification=True):
+        data = {
+        'chat_id': chat_id,
+        'from_chat_id': from_chat_id,
+        'message_id': message_id,
+        'disable_notification': disable_notification
+        }
         try:
-            self._response = requests.post(self._url
-                                           + '/sendMessage', data=param)
-            return self._response
+            self._response = requests.post(self._url + '/forwardMessage',
+                                           data=data)
         except:
             return None
-
-
-    def forwaedMessage(self, chat_id,from_chat_id,
-                       message_id, disable_notification=True):
-        pass
+        else:
+            return self._response
 
 
     def sendPhoto(self, chat_id, photo, **kwargs):
-        pass
+        data = {
+        'chat_id': chat_id,
+        'caption': kwargs.get('caption', None),
+        'disable_notification': kwargs.get('disable_notification', False),
+        'reply_to_message_id': kwargs.get('reply_to_message_id', None),
+        'reply_markup': kwargs.get('reply_markup', None)
+        }
+        files = {
+        'photo': open(photo, 'rb')
+        }
+        try:
+            self._response = requests.post(self._url + '/sendPhoto',
+                                           data=data, files=files)
+        except:
+            return None
+        else:
+            return self._response
 
 
     def sendAudio(self, chat_id, audio, **kwargs):
-        pass
+        data = {
+        'chat_id': chat_id,
+        'caption': kwargs.get('caption', None),
+        'duration': kwargs.get('duration', None),
+        'performer': kwargs.get('performer', None),
+        'title': kwargs.get('title', None),
+        'disable_notification': kwargs.get('disable_notification', False)
+        'reply_to_message_id': kwargs.get('reply_to_message_id', None),
+        'reply_markup': kwargs.get('reply_markup', None)
+        }
+        files = {
+        'audio': open(audio, 'rb')
+        }
+        try:
+            self._response = requests.post(self._url + '/sendPhoto',
+                                           data=data, files=files)
+        except:
+            return None
+        else:
+            return self._response
 
 
     def sendDocument(self, chat_id, document, **kwargs):
-        pass
+        data = {
+        'chat_id': chat_id,
+        'caption': kwargs.get('caption', None),
+        'disable_notification': kwargs.get('disable_notification', False),
+        'reply_to_message_id': kwargs.get('reply_to_message_id', None),
+        'reply_markup': kwargs.get('reply_markup', None)
+        }
+        files={
+        'document': open(document, 'rb')
+        }
+        try:
+            self._response = requests.post(self._url + '/sendPhoto',
+                                           data=data, files=files)
+        except:
+            return None
+        else:
+            return self._response
 
 
     def sendVideo(self,chat_id, video, **kwargs):
-        pass
+        data = {
+        'chat_id': chat_id,
+        'duration': kwargs.get('duration', None),
+        'caption': kwargs.get('caption', None),
+        'width': kwargs.get('width', None),
+        'height': kwargs.get('height', None),
+        'disable_notification': kwargs.get('disable_notification', False),
+        'reply_to_message_id': kwargs.get('reply_to_message_id', None),
+        'reply_markup': kwargs.get('reply_markup', None)
+        }
+        files= {
+        'video': open(video, 'rb')
+        }
+        try:
+            self._response = requests.post(self._url + '/sendPhoto',
+                                           data=data, files=files)
+        except:
+            return None
+        else:
+            return self._response
 
 
     def sendVoice(self, chat_id, voice, **kwargs):
-        pass
+        data = {
+        'chat_id': chat_id,
+        'caption': kwargs.get('caption', None),
+        'duration': kwargs.get('duration', None),
+        'disable_notification': kwargs.get('disable_notification', False),
+        'reply_to_message_id': kwargs.get('reply_to_message_id', None),
+        'reply_markup': kwargs.get('reply_markup', None)
+        }
+        files={
+        'voice': open(voice, 'rb')
+        }
+        try:
+            self._response = requests.post(self._url + '/sendPhoto',
+                                           data=data, files=files)
+        except:
+            return None
+        else:
+            return self._response
 
 
     def sendVideoNote(self, chat_id, vnote, **kwargs):
-        pass
+        data = {
+        'chat_id': chat_id,
+        'duration': kwargs.get('duration', 10),
+        'length': kwargs.get('length', None),
+        'disable_notification': kwargs.get('disable_notification', False),
+        'reply_to_message_id': kwargs.get('reply_to_message_id', None),
+        'reply_markup': kwargs.get('reply_markup', None)
+        }
+        files = {
+        'video_note': open(vnote, 'rb')
+        }
+        try:
+            self._response = requests.post(self._url + '/sendPhoto',
+                                           data=data, files=files)
+        except:
+            return None
+        else:
+            return self._response
 
 
     def sendMediaGroup(self, chat_id, media, **kwargs):
@@ -135,7 +248,24 @@ class TelBotClass(object):
 
 
     def sendChatAction(self, chat_id, action):
-        pass
+        """
+        Type of action to broadcast. Choose one, depending on what the user is
+        about to receive: typing for text messages, upload_photo for photos,
+        record_video or upload_video for videos, record_audio or upload_audio
+        for audio files, upload_document for general files, find_location for
+        location data, record_video_note or upload_video_note for video notes.
+        """
+        data = {
+        'chat_id': chat_id,
+        'action': action
+        }
+        try:
+            self._response = requests.post(self._url + 'sendChatAction',
+                                           data=data)
+        except:
+            return False
+        else:
+            return self._response
 
 
     def getUserProfilePhotos(self, user_id, **kwargs):
