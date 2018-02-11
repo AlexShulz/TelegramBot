@@ -463,7 +463,7 @@ class TelBotClass(object):
         'member_id': int(member_id)
         }
         try:
-            response = requests.post(self._url + 'getChatMember',data=data)
+            response = requests.post(self._url + '/getChatMember',data=data)
         except:
             return None
         else:
@@ -479,7 +479,7 @@ class TelBotClass(object):
             if ('can_set_sticker_set' in list(chat.keys()) and
                 chat['can_set_sticker_set'] == True):
                 try:
-                    requests.post(self._url + 'setChatStickerSet', data=data)
+                    requests.post(self._url + '/setChatStickerSet', data=data)
                 except:
                     return False
                 else:
@@ -529,4 +529,3 @@ class TelBotClass(object):
             return False
         else:
             return True
-            
