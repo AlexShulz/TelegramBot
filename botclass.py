@@ -14,9 +14,9 @@ class TelBotClass(object):
 
     def getUpdates(self, **kwargs):
         """Get new incoming messages from bot"""
-        self._offset = kwargs.get('offset', 0)
-        self._timeout = kwargs.get('timeout', 0)
-        self._limit = kwargs.get('limit', 0)
+        self._offset = kwargs.get('offset', None)
+        self._timeout = kwargs.get('timeout', None)
+        self._limit = kwargs.get('limit', None)
 
         data = {
         'offset': self._offset,
@@ -65,7 +65,13 @@ class TelBotClass(object):
         """ Sending a message from bot to specified chat """
         param = {
         'chat_id': chat_id,
-        'text': text
+        'text': text,
+        'parse_mode': kwargs.get('parse_mode', None),
+        'disable_web_page_preview': kwargs.get('disable_web_page_preview',
+                                               None),
+        'disable_notification': kwargs.get('disable_notification', False),
+        'reply_to_message_id': kwargs.get('reply_to_message_id', None),
+        'reply_markup': kwargs.get('reply_markup', None)
         }
 
         response = requests.post(self._url
