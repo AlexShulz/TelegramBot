@@ -1,13 +1,20 @@
-#!/usb/bin/python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""TelegramBot
-version = 0.1
-author Alexey Preyzner
-"""
 import requests
 
 
+__author__ = "Aleksey Preyzner"
+__copyright__ = "Copyright 2018, Aleksey Prezyenr"
+__credits__ = ["Aleksey Preyzner"]
+__license__ = "GPL v3.0"
+__version__ = "0.1"
+__maintainer__ = "Aleksey Preyzner"
+__email__ = "alexey.preyzner@gmail.com"
+__status__ = "Development"
+
+
 class TelBotClass(object):
+    """Documentation for TelBotClass"""
     def __init__(self, token):
         self._token = token
         self._url = "https://api.telegram.org/bot" + self._token
@@ -35,14 +42,24 @@ class TelBotClass(object):
             return None
 
     def setWebhook(self, url, **kwargs):
+        """Documentation for setWebhook method"""
         data={
-        'url': url
+        'url': url,
+        'max_connections': kwargs.get('max_connections', 40),
+        'allowed_updates': kwargs.get('allowed_updates', None)
         }
+        if 'certificate' in list(kwargs.keys()):
+            cert = {
+            'certificate': open(kwargs['certificate'], 'rb')
+            }
+        else:
+            cert = None
         try:
-            requests.post(self._url + '/setWebhook', data=data)
-            return True
+            requests.post(self._url + '/setWebhook', data=data, files=cert)
         except:
             return False
+        else:
+            return True
 
     def deleteWebhook(self):
         """Try to delete Webhook. If success returns True, else returns False"""
