@@ -21,12 +21,12 @@ class TelBotClass(object):
         'timeout': self._timeout
         }
         try:
-            self._request = requests.post(self._url + '/getUpdates', data=data)
-            if (self._request.status_code != 200
-                or not self._request.json()['ok']):
+            response = requests.post(self._url + '/getUpdates', data=data)
+            if (response.status_code != 200
+                or not response.json()['ok']):
                 return None
             else:
-                return self._request.json()['result']
+                return response.json()['result']
 
         except:
             return None
@@ -54,7 +54,7 @@ class TelBotClass(object):
     def deleteWebhook(self):
         """Try to delete Webhook. If success returns True, else returns False"""
         try:
-            self._request = requests.get(self._url + '/deleteWebhook')
+            response = requests.get(self._url + '/deleteWebhook')
             return True
         except:
             return False
@@ -63,8 +63,8 @@ class TelBotClass(object):
     def getWebhookInfo(self):
         """Get information about webhook"""
         try:
-            self._request = requests.get(self._url + '/getWebhookInfo')
-            return self._request
+            response = requests.get(self._url + '/getWebhookInfo')
+            return response
         except:
             return None
 
