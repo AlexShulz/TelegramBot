@@ -1,9 +1,10 @@
+
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import requests
 
 
-class TelBotClass(object):
+class TelBotClass():
     """Documentation for TelBotClass"""
     def __init__(self, token):
         self._token = token
@@ -20,16 +21,13 @@ class TelBotClass(object):
         'limit': self._limit,
         'timeout': self._timeout
         }
-        try:
-            response = requests.post(self._url + '/getUpdates', data=data)
-            if (response.status_code != 200
-                or not response.json()['ok']):
-                return None
-            else:
-                return response.json()['result']
 
-        except:
+        response = requests.post(self._url + '/getUpdates', data=data)
+        if (response.status_code != 200
+            or not response.json()['ok']):
             return None
+        else:
+            return response.json()['result']
 
     def setWebhook(self, url, **kwargs):
         """Documentation for setWebhook method"""
@@ -55,21 +53,26 @@ class TelBotClass(object):
         """Try to delete Webhook. If success returns True, else returns False"""
         try:
             response = requests.get(self._url + '/deleteWebhook')
-            return True
         except:
             return False
+        else:
+            if (response.status_code == 200 and response.json()['ok']
+                and response.json()['result']):
+                return True
+            else:
+                return False
 
-    @property
     def getWebhookInfo(self):
         """Get information about webhook"""
         try:
             response = requests.get(self._url + '/getWebhookInfo')
-            return response
         except:
             return None
+        else:
+            return response.json()['result']
 
     def sendMessage(self, chat_id, text, **kwargs):
-        """ Sending a message from bot to specified chat """
+        """ Sending a message from the bot to the specified chat """
         param = {
         'chat_id': chat_id,
         'text': text,
@@ -83,7 +86,7 @@ class TelBotClass(object):
 
         response = requests.post(self._url
                                        + '/sendMessage', data=param)
-        return response
+        return response.json()['result']
 
     def forwardMessage(self, chat_id,from_chat_id,
                        message_id, disable_notification=True):
@@ -99,7 +102,7 @@ class TelBotClass(object):
         except:
             return None
         else:
-            return response
+            return response.json()['result']
 
     def sendPhoto(self, chat_id, photo, **kwargs):
         data = {
@@ -118,7 +121,7 @@ class TelBotClass(object):
         except:
             return None
         else:
-            return response
+            return response.json()['result']
 
     def sendAudio(self, chat_id, audio, **kwargs):
         data = {
@@ -140,7 +143,7 @@ class TelBotClass(object):
         except:
             return None
         else:
-            return response
+            return response.json()['result']
 
     def sendDocument(self, chat_id, document, **kwargs):
         data = {
@@ -154,12 +157,12 @@ class TelBotClass(object):
         'document': open(document, 'rb')
         }
         try:
-            response = requests.post(self._url + '/sendPhoto',
+            response = requests.post(self._url + '/sendDocument',
                                            data=data, files=files)
         except:
             return None
         else:
-            return response
+            return response.json()['result']
 
     def sendVideo(self,chat_id, video, **kwargs):
         data = {
@@ -181,7 +184,7 @@ class TelBotClass(object):
         except:
             return None
         else:
-            return response
+            return response.json()['result']
 
     def sendVoice(self, chat_id, voice, **kwargs):
         data = {
@@ -201,7 +204,7 @@ class TelBotClass(object):
         except:
             return None
         else:
-            return response
+            return response.json()['result']
 
     def sendVideoNote(self, chat_id, vnote, **kwargs):
         data = {
@@ -221,7 +224,7 @@ class TelBotClass(object):
         except:
             return None
         else:
-            return response
+            return response.json()['result']
 
     def sendMediaGroup(self, chat_id, media,
                        reply_to_message_id=None, **kwargs):
