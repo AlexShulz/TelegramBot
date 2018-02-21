@@ -42,12 +42,11 @@ class TelBotClass():
             }
         else:
             cert = None
-        try:
-            requests.post(self._url + '/setWebhook', data=data, files=cert)
-        except:
-            return False
-        else:
+        requests.post(self._url + '/setWebhook', data=data, files=cert)
+        if requests.status_code == 200:
             return True
+        else:
+            return False
 
     def deleteWebhook(self):
         """Try to delete Webhook. If success returns True, else returns False"""
@@ -64,9 +63,8 @@ class TelBotClass():
 
     def getWebhookInfo(self):
         """Get information about webhook"""
-        try:
-            response = requests.get(self._url + '/getWebhookInfo')
-        except:
+        response = requests.get(self._url + '/getWebhookInfo')
+        if response.status_code != 200:
             return None
         else:
             return response.json()['result']
@@ -96,10 +94,9 @@ class TelBotClass():
         'message_id': message_id,
         'disable_notification': disable_notification
         }
-        try:
-            response = requests.post(self._url + '/forwardMessage',
-                                           data=data)
-        except:
+        response = requests.post(self._url + '/forwardMessage',
+                                 data=data)
+        if response.status_code != 200:
             return None
         else:
             return response.json()['result']
@@ -115,10 +112,9 @@ class TelBotClass():
         files = {
         'photo': open(photo, 'rb')
         }
-        try:
-            response = requests.post(self._url + '/sendPhoto',
-                                           data=data, files=files)
-        except:
+        response = requests.post(self._url + '/sendPhoto',
+                                 data=data, files=files)
+        if response.status_code != 200:
             return None
         else:
             return response.json()['result']
@@ -137,10 +133,9 @@ class TelBotClass():
         files = {
         'audio': open(audio, 'rb')
         }
-        try:
-            response = requests.post(self._url + '/sendPhoto',
-                                           data=data, files=files)
-        except:
+        response = requests.post(self._url + '/sendPhoto',
+                                 data=data, files=files)
+        if response.status_code != 200:
             return None
         else:
             return response.json()['result']
@@ -156,10 +151,9 @@ class TelBotClass():
         files={
         'document': open(document, 'rb')
         }
-        try:
-            response = requests.post(self._url + '/sendDocument',
-                                           data=data, files=files)
-        except:
+        response = requests.post(self._url + '/sendDocument',
+                                 data=data, files=files)
+        if response.status_code != 200:
             return None
         else:
             return response.json()['result']
@@ -178,10 +172,9 @@ class TelBotClass():
         files= {
         'video': open(video, 'rb')
         }
-        try:
-            response = requests.post(self._url + '/sendPhoto',
-                                           data=data, files=files)
-        except:
+        response = requests.post(self._url + '/sendPhoto',
+                                 data=data, files=files)
+        if response.status_code != 200:
             return None
         else:
             return response.json()['result']
@@ -198,10 +191,9 @@ class TelBotClass():
         files={
         'voice': open(voice, 'rb')
         }
-        try:
-            response = requests.post(self._url + '/sendPhoto',
-                                           data=data, files=files)
-        except:
+        response = requests.post(self._url + '/sendPhoto',
+                                 data=data, files=files)
+        if response.status_code != 200:
             return None
         else:
             return response.json()['result']
@@ -218,10 +210,9 @@ class TelBotClass():
         files = {
         'video_note': open(vnote, 'rb')
         }
-        try:
-            response = requests.post(self._url + '/sendPhoto',
-                                           data=data, files=files)
-        except:
+        response = requests.post(self._url + '/sendPhoto',
+                                 data=data, files=files)
+        if response.status_code != 200:
             return None
         else:
             return response.json()['result']
@@ -244,9 +235,8 @@ class TelBotClass():
         'reply_to_message_id': kwargs.get('reply_to_message_id', None),
         'reply_markup': kwargs.get('reply_markup', None)
         }
-        try:
-            response = requests.post(self._url + '/sendLocation', data=data)
-        except:
+        response = requests.post(self._url + '/sendLocation', data=data)
+        if response.status_code != 200:
             return None
         else:
             return response.json()['result']
@@ -275,10 +265,8 @@ class TelBotClass():
         'chat_id': chat_id,
         'action': action
         }
-        try:
-            response = requests.post(self._url + '/sendChatAction',
-                                           data=data)
-        except:
+        response = requests.post(self._url + '/sendChatAction', data=data)
+        if response.status_code != 200:
             return False
         else:
             return True
@@ -292,9 +280,8 @@ class TelBotClass():
         'user_id': user_id,
         'until_date': until_date
         }
-        try:
-            requests.post(self._url + '/kickChatMember', data=data)
-        except:
+        requests.post(self._url + '/kickChatMember', data=data)
+        if response.status_code != 200:
             return False
         else:
             return True
@@ -304,9 +291,8 @@ class TelBotClass():
         'chat_id': chat_id,
         'user_id': user_id
         }
-        try:
-            requests.post(self._url + '/unbanChatMember', data=data)
-        except:
+        requests.post(self._url + '/unbanChatMember', data=data)
+        if response.status_code != 200:
             return False
         else:
             return True
@@ -322,9 +308,8 @@ class TelBotClass():
         'can_add_web_page_previews': kwargs.get('can_add_web_page_previews',
                                                 False)
         }
-        try:
-            requests.post(self._url + '/restrictChatMember', data=data)
-        except:
+        requests.post(self._url + '/restrictChatMember', data=data)
+        if response.status_code != 200:
             return False
         else:
             return True
@@ -342,18 +327,16 @@ class TelBotClass():
         'can_pin_messages': kwargs.get('can_pin_messages', True),
         'can_promote_members': kwargs.get('can_promote_members', True)
         }
-        try:
-            requests.post(self._url + '/promoteChatMember', data=data)
-        except:
+        requests.post(self._url + '/promoteChatMember', data=data)
+        if response.status_code != 200:
             return False
         else:
             return True
 
     def exportChatInviteLink(self, chat_id):
-        try:
-            response = requests.post(self._url + '/exportChatInviteLink',
-                                     data={'chat_id': chat_id})
-        except:
+        response = requests.post(self._url + '/exportChatInviteLink',
+                                 data={'chat_id': chat_id})
+        if response.status_code != 200:
             return None
         else:
             return response.json()['result']
@@ -365,10 +348,9 @@ class TelBotClass():
         files = {
         'photo': open(chat_photo, 'rb')
         }
-        try:
-            response = requests.post(self._url + '/setChatPhoto',
-                                           data=data, files=files)
-        except:
+        response = requests.post(self._url + '/setChatPhoto',
+                                 data=data, files=files)
+        if response.status_code != 200:
             return False
         else:
             return True
@@ -377,9 +359,8 @@ class TelBotClass():
         data = {
         'chat_id': chat_id
         }
-        try:
-            requests.post(self._url + '/deleteChatPhoto', data=data)
-        except:
+        requests.post(self._url + '/deleteChatPhoto', data=data)
+        if response.status_code != 200:
             return False
         else:
             return True
@@ -389,9 +370,8 @@ class TelBotClass():
         'chat_id': chat_id,
         'title': title
         }
-        try:
-            requests.post(self._url + '/setChatTitle', data=data)
-        except:
+        requests.post(self._url + '/setChatTitle', data=data)
+        if response.status_code != 200:
             return False
         else:
             return True
@@ -401,9 +381,8 @@ class TelBotClass():
         'chat_id': chat_id,
         'description': str(description)
         }
-        try:
-            requests.post(self._url + '/setChatDescription', data=data)
-        except:
+        requests.post(self._url + '/setChatDescription', data=data)
+        if response.status_code != 200:
             return False
         else:
             return True
@@ -415,9 +394,8 @@ class TelBotClass():
         'message_id': message_id,
         'disable_notification': disable_notification
         }
-        try:
-            requests.post(self._url + '/pinChatMessage', data=data)
-        except:
+        requests.post(self._url + '/pinChatMessage', data=data)
+        if response.status_code != 200:
             return False
         else:
             return True
@@ -426,9 +404,8 @@ class TelBotClass():
         data = {
         'chat_id': chat_id
         }
-        try:
-            requests.post(self._url + '/unpinChatMessage', data=data)
-        except:
+        requests.post(self._url + '/unpinChatMessage', data=data)
+        if response.status_code != 200:
             return False
         else:
             return True
@@ -437,9 +414,8 @@ class TelBotClass():
         data = {
         'chat_id': chat_id
         }
-        try:
-            requests.post(self._url + '/leaveChat', data=data)
-        except:
+        requests.post(self._url + '/leaveChat', data=data)
+        if response.status_code != 200:
             return False
         else:
             return True
@@ -448,27 +424,24 @@ class TelBotClass():
         data = {
         'chat_id': chat_id
         }
-        try:
-            response = requests.post(self._url + '/getChat', data=data)
-        except:
+        response = requests.post(self._url + '/getChat', data=data)
+        if response.status_code != 200:
             return None
         else:
             return response.json()['result']
 
     def getChatAdministrators(self, chat_id):
-        try:
-            response = requests.post(self._url + '/getChatAdministrators',
-                          data={'chat_id': chat_id})
-        except:
+        response = requests.post(self._url + '/getChatAdministrators',
+                                 data={'chat_id': chat_id})
+        if response.status_code != 200:
             return None
         else:
             return response.json()['result']
 
     def getChatMembersCount(self, chat_id):
-        try:
-            response = requests.post(self._url + '/getChatMembersCount',
-                                     data={'chat_id': chat_id})
-        except:
+        response = requests.post(self._url + '/getChatMembersCount',
+                                 data={'chat_id': chat_id})
+        if response.status_code != 200:
             return None
         else:
             return response.json()["result"]
@@ -478,9 +451,8 @@ class TelBotClass():
         'chat_id': chat_id,
         'member_id': int(member_id)
         }
-        try:
-            response = requests.post(self._url + '/getChatMember',data=data)
-        except:
+        response = requests.post(self._url + '/getChatMember',data=data)
+        if response.status_code != 200:
             return None
         else:
             response.json()['result']
@@ -494,9 +466,8 @@ class TelBotClass():
             chat = self.getChat(chat_id)
             if ('can_set_sticker_set' in list(chat.keys()) and
                 chat['can_set_sticker_set'] == True):
-                try:
-                    requests.post(self._url + '/setChatStickerSet', data=data)
-                except:
+                requests.post(self._url + '/setChatStickerSet', data=data)
+                if response.status_code != 200:
                     return False
                 else:
                     return True
@@ -510,10 +481,9 @@ class TelBotClass():
             chat = self.getChat(chat_id)
             if ('can_set_sticker_set' in list(chat.keys()) and
                 chat['can_set_sticker_set'] == True):
-                try:
-                    requests.post(self._url + '/deleteChatStickerSet',
-                                  data={'chat_id': chat_id})
-                except:
+                requests.post(self._url + '/deleteChatStickerSet',
+                              data={'chat_id': chat_id})
+                if response.status_code != 200:
                     return False
                 else:
                     return True
@@ -538,10 +508,9 @@ class TelBotClass():
         pass
 
     def deleteMessage(self, chat_id, message_id):
-        try:
-            requests.post(self._url + '/deleteMessage',
-                          data = {'chat_id': chat_id,'message_id': message_id})
-        except:
+        requests.post(self._url + '/deleteMessage',
+                      data = {'chat_id': chat_id,'message_id': message_id})
+        if response.status_code != 200:
             return False
         else:
             return True
