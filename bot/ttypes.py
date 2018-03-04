@@ -27,6 +27,35 @@ class JsonDec:
             raise ValueError('jtype is not json dict or string type.')
 
 
+class WebHookInfo(JsonDec):
+    """
+    Doc for WebHookInfo class
+    """
+    @classmethod
+    def dejson(cls, jtype):
+        obj = cls.check_json(jtype)
+        url = obj.get('url')
+        has_custom_certificate = obj['has_custom_certificate']
+        pending_update_count = obj['pending_update_count']
+        last_error_date = obj.get('last_error_date')
+        last_error_message = obj.get('last_error_message')
+        max_connections = obj.get('max_connections')
+        allowed_updates = obj.get('allowed_updates')
+        return cls(url, has_custom_certificate, pending_update_count,
+                   last_error_date, last_error_message, max_connections,
+                   allowed_updates)
+    def __init__(self, url, has_custom_certificate, pending_update_count,
+                 last_error_date=None, last_error_message=None,
+                 max_connections=None, allowed_updates=[]):
+        self.url = url
+        self.has_custom_certificate = has_custom_certificate
+        self.pending_update_count = pending_update_count
+        self.last_error_date = last_error_date
+        self.last_error_message = last_error_message
+        self.max_connections = max_connections
+        self.allowed_updates = allowed_updates
+
+
 class Update(JsonDec):
     """
     Doc string for Update class
@@ -125,7 +154,7 @@ class Message(JsonDec):
             options['author_signature'] = obj.get('author_signature')
         if 'text' in obj:
             options['text'] = obj.get('text')
-        if 'entities' i obj:
+        if 'entities' in obj:
             options['entities'] = []
             for e in obj.get('entities'):
                 options['entities'].append(MessageEntity.dejson(e))
@@ -358,7 +387,7 @@ class Document(JsonDec):
         file_size = obj.get('file_size')
         return cls(file_id, thumb, file_name, mime_type, file_size)
 
-    def __init__(self, file_id, thumb=None, file_name=None, mime_type=None
+    def __init__(self, file_id, thumb=None, file_name=None, mime_type=None,
                  file_size=None):
         self.file_id = file_id
         self.thumb = thumb
@@ -462,6 +491,102 @@ class Contact(JsonDec):
         self.last_name = last_name
         self.user_id = user_id
 
+
+class Location(JsonDec):
+    """
+    Location
+    """
+    @classmethod
+    def dejson(cls, jtype):
+        obj = cls.check_json(jtype)
+        longtitude = obj['longtitude']
+        latitude = obj['latitude']
+        return cls(longtitude, latitude)
+
+    def __init__(self, longtitude, latitude):
+        self.longtitude = longtitude
+        self.latitude = latitude
+
+
+class UserProfilePhotos(JsonDec):
+    """
+    """
+    @classmethod
+    def dejson(cls, jtype):
+        obj = cls.check_json(jtype)
+
+
+
+class File(JsonDec):
+    """
+    """
+    @classmethod
+    def dejson(cls, jtype):
+        obj = cls.check_json(jtype)
+        file_id = obj['file_id']
+        file_size = obj['file_size']
+        file_path = obj['file_path']
+        return cls(file_id, file_size, file_path)
+
+    def __init__(self, file_id, file_size, file_path):
+        self.file_id = file_id
+        self.file_size = file_size
+        self.file_path = file_path
+
+
+class ReplyKeyboardMarkup(JsonEnc):
+    """
+    Doc for class
+    """
+    def __init__(self, resize_keyboard=False, one_time_keyboard=False,
+                 selective=False, row_width=2):
+        self.resize_keyboard = resize_keyboard
+        self.one_time_keyboard = one_time_keyboard
+        self.selective = selective
+        self.row_width = row_width
+        self.keyboard = []
+
+    def add_button(self, *args):
+        pass
+
+    def add_row(self, *args):
+        pass
+
+    def enjson(self):
+        jdict = {'keyboard': self.keyboard}
+        if self.resize_keyboard:
+            jdict['resize_keyboard'] = self.resize_keyboard
+        if self.one_time_keyboard:
+            jdict['one_time_keyboard'] = self.one_time_keyboard
+        if self.selective:
+            jdict['selective'] = self.selective
+        return json.dumps(jdict)
+
+
+class KeyboardButton(JsonEnc):
+    """
+    DOc for KeyboardButton class
+    """
+    def __init__(self, text, request_contact=False, request_location=False):
+        self.text = text
+        self.request_contact = request_contact
+        self.request_location = request_location
+
+    def enjson(self):
+        jdict = {'text': self.text}
+        if self.request_contact:
+            jdict['request_contact'] = self.request_contact
+        if self.request_location:
+            jdict['request_location'] = self.request_location
+        return json.dumps(jdict)
+
+
+class InlineKeyboardMarkup(JsonEnc):
+    """
+    Doc for InlineKeyboardMarkup class
+    """
+    def __init__(self):
+        pass
 
 class InlineQuery(JsonDec):
     """

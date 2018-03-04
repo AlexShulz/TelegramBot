@@ -240,8 +240,8 @@ class TelBotClass():
     def editMessageLiveLocation(self, chat_id, latitude, longtitude, **kwargs):
         pass
 
-    def stopMessageLiveLocation(self, chat_id=Null, message_id=Null,
-                                inline_message_id=Null, reply_markup=Null):
+    def stopMessageLiveLocation(self, chat_id=None, message_id=None,
+                                inline_message_id=None, reply_markup=None):
         data={
         'chat_id':chat_id,
         'message_id': message_id,
@@ -520,8 +520,8 @@ class TelBotClass():
         data = {
         'chat_id': kwargs.get('chat_id', None),
         'message_id': kwargs.get('message_id', None),
-        'inline_message_id': kwargs.get('inline_message_id', None)
-        'text':text,
+        'inline_message_id': kwargs.get('inline_message_id', None),
+        'text': text,
         'parse_mode': kwargs.get('parse_mode', None),
         'disable_web_page_preview': kwargs.get('disable_web_page_preview', False),
         'reply_markup': kwargs.get('reply_markup', None)
