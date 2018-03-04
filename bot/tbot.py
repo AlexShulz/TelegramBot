@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import requests
@@ -241,22 +240,57 @@ class TelBotClass():
     def editMessageLiveLocation(self, chat_id, latitude, longtitude, **kwargs):
         pass
 
-    def stopMessageLiveLocation(self, chat_id, **kwargs):
-        pass
+    def stopMessageLiveLocation(self, chat_id=Null, message_id=Null,
+                                inline_message_id=Null, reply_markup=Null):
+        data={
+        'chat_id':chat_id,
+        'message_id': message_id,
+        'inline_message_id': inline_message_id,
+        'reply_markup': reply_markup
+        }
+        response = self._make_request(method='post',
+                                      method_name='/stopMessageLiveLocation',
+                                      data=data)
+        return response
 
     def sendVenue(self, chat_id, latitude, longtitude, title, address, **kwargs):
-        pass
+        data={
+        'chat_id':chat_id,
+        'latitude':latitude,
+        'longtitude':longtitude,
+        'title': title,
+        'address': address,
+        'foursquare_id': kwargs.get('foursquare_id', None),
+        'disable_notification': kwargs.get('disable_notification', False),
+        'reply_to_message_id': kwargs.get('reply_to_message_id', None),
+        'reply_markup': kwargs.get('reply_markup', None)
+        }
+        response = self._make_request(method='post', method_name='sendVenue',
+                                      data=data)
+        return response
 
     def sendContact(self, chat_id, phone_num, first_name, **kwargs):
-        pass
+        data={
+        'chat_id': chat_id,
+        'phone_number': phone_num,
+        'first_name': first_name,
+        'last_name': kwargs.get('last_name', None),
+        'disable_notification': kwargs.get('disable_notification', False),
+        'reply_to_message_id': kwargs.get('reply_to_message_id', None),
+        'reply_markup': kwargs.get('reply_markup', None)
+        }
+        response = self._make_request(method='post', method_name='sendContact',
+                                      data=data)
+        return response
 
     def sendChatAction(self, chat_id, action):
         """
         Type of action to broadcast. Choose one, depending on what the user is
-        about to receive: typing for text messages, upload_photo for photos,
-        record_video or upload_video for videos, record_audio or upload_audio
-        for audio files, upload_document for general files, find_location for
-        location data, record_video_note or upload_video_note for video notes.
+        about to receive.
+
+        :param action: typing, upload_photo, record_video, upload_video,
+        record_audio, upload_audio, upload_document, find_location, record_video_note,
+        upload_video_note.
         """
         data = {
         'chat_id': chat_id,
@@ -267,8 +301,16 @@ class TelBotClass():
                                       data=data)
         return response
 
-    def getUserProfilePhotos(self, user_id, **kwargs):
-        pass
+    def getUserProfilePhotos(self, user_id, offset, limit):
+        data = {
+        'user_id': user_id,
+        'offset': offset,
+        'limit': limit
+        }
+        response = self._make_request(method='post',
+                                      method_name='/getUserProfilePhotos',
+                                      data=data)
+        return response
 
     def kickChatMember(self, chat_id, user_id, until_date=None):
         data= {
@@ -459,19 +501,61 @@ class TelBotClass():
 
 
     def answerCallbackQuery(self, callback_query_id, **kwargs):
-        pass
+        data = {
+        'callback_query_id': callback_query_id,
+        'text': kwargs.get('text', None),
+        'show_alert': kwargs.get('show_alert', None),
+        'url': kwargs.get('url', None),
+        'cache_time': kwargs.get('cache_time', None)
+        }
+        response = self._make_request(method='post',
+                                      method_name='/answerInlineQuery',
+                                      data=data)
+        return response
 
     def answerInlineQuery(inline_query_id, results, **kwargs):
         pass
 
     def editMessageText(self, text, **kwargs):
-        pass
+        data = {
+        'chat_id': kwargs.get('chat_id', None),
+        'message_id': kwargs.get('message_id', None),
+        'inline_message_id': kwargs.get('inline_message_id', None)
+        'text':text,
+        'parse_mode': kwargs.get('parse_mode', None),
+        'disable_web_page_preview': kwargs.get('disable_web_page_preview', False),
+        'reply_markup': kwargs.get('reply_markup', None)
+        }
+        response = self._make_request(method='post',
+                                      method_name='/editMessageText',
+                                      data=data)
+        return response
 
     def editMessageCaption(self, **kwargs):
-        pass
+        data = {
+        'chat_id': kwargs.get('chat_id', None),
+        'message_id': kwargs.get('message_id', None),
+        'inline_message_id': kwargs.get('inline_message_id', None),
+        'caption': kwargs.get('caption', None),
+        'parse_mode': kwargs.get('parse_mode', None),
+        'reply_markup': kwargs.get('reply_markup', None)
+        }
+        response = self._make_request(method='post',
+                                      method_name='/editMessageCaption',
+                                      data=data)
+        return response
 
     def editMessageReplyMarkup(self, **kwargs):
-        pass
+        data = {
+        'chat_id': kwargs.get('chat_id', None),
+        'message_id': kwargs.get('message_id', None),
+        'inline_message_id': kwargs.get('inline_message_id', None),
+        'reply_markup': kwargs.get('reply_markup', None)
+        }
+        response = self._make_request(method='post',
+                                      method_name='/editMessageReplyMarkup',
+                                      data=data)
+        return response
 
     def deleteMessage(self, chat_id, message_id):
         data = {
