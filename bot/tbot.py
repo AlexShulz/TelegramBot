@@ -27,9 +27,9 @@ class TelBotClass():
 
     def getUpdates(self, **kwargs):
         """Get new incoming messages from bot"""
-        self._offset = kwargs.get('offset', None)
-        self._timeout = kwargs.get('timeout', None)
-        self._limit = kwargs.get('limit', None)
+        self._offset = kwargs.get('offset')
+        self._timeout = kwargs.get('timeout')
+        self._limit = kwargs.get('limit')
 
         data = {
         'offset': self._offset,
@@ -46,7 +46,7 @@ class TelBotClass():
         data={
         'url': url,
         'max_connections': kwargs.get('max_connections', 40),
-        'allowed_updates': kwargs.get('allowed_updates', None)
+        'allowed_updates': kwargs.get('allowed_updates')
         }
         if 'certificate' in list(kwargs.keys()):
             cert = {
@@ -77,12 +77,11 @@ class TelBotClass():
         param = {
         'chat_id': chat_id,
         'text': text,
-        'parse_mode': kwargs.get('parse_mode', None),
-        'disable_web_page_preview': kwargs.get('disable_web_page_preview',
-                                               None),
+        'parse_mode': kwargs.get('parse_mode'),
+        'disable_web_page_preview': kwargs.get('disable_web_page_preview'),
         'disable_notification': kwargs.get('disable_notification', False),
-        'reply_to_message_id': kwargs.get('reply_to_message_id', None),
-        'reply_markup': kwargs.get('reply_markup', None)
+        'reply_to_message_id': kwargs.get('reply_to_message_id'),
+        'reply_markup': kwargs.get('reply_markup')
         }
 
         response = self._make_request(method='post',
@@ -106,10 +105,10 @@ class TelBotClass():
     def sendPhoto(self, chat_id, photo, **kwargs):
         data = {
         'chat_id': chat_id,
-        'caption': kwargs.get('caption', None),
+        'caption': kwargs.get('caption'),
         'disable_notification': kwargs.get('disable_notification', False),
-        'reply_to_message_id': kwargs.get('reply_to_message_id', None),
-        'reply_markup': kwargs.get('reply_markup', None)
+        'reply_to_message_id': kwargs.get('reply_to_message_id'),
+        'reply_markup': kwargs.get('reply_markup')
         }
         files = {
         'photo': open(photo, 'rb')
@@ -123,13 +122,13 @@ class TelBotClass():
     def sendAudio(self, chat_id, audio, **kwargs):
         data = {
         'chat_id': chat_id,
-        'caption': kwargs.get('caption', None),
-        'duration': kwargs.get('duration', None),
-        'performer': kwargs.get('performer', None),
-        'title': kwargs.get('title', None),
+        'caption': kwargs.get('caption'),
+        'duration': kwargs.get('duration'),
+        'performer': kwargs.get('performer'),
+        'title': kwargs.get('title'),
         'disable_notification': kwargs.get('disable_notification', False),
-        'reply_to_message_id': kwargs.get('reply_to_message_id', None),
-        'reply_markup': kwargs.get('reply_markup', None)
+        'reply_to_message_id': kwargs.get('reply_to_message_id'),
+        'reply_markup': kwargs.get('reply_markup')
         }
         files = {
         'audio': open(audio, 'rb')
@@ -143,10 +142,10 @@ class TelBotClass():
     def sendDocument(self, chat_id, document, **kwargs):
         data = {
         'chat_id': chat_id,
-        'caption': kwargs.get('caption', None),
+        'caption': kwargs.get('caption'),
         'disable_notification': kwargs.get('disable_notification', False),
-        'reply_to_message_id': kwargs.get('reply_to_message_id', None),
-        'reply_markup': kwargs.get('reply_markup', None)
+        'reply_to_message_id': kwargs.get('reply_to_message_id'),
+        'reply_markup': kwargs.get('reply_markup')
         }
         files={
         'document': open(document, 'rb')
@@ -160,13 +159,13 @@ class TelBotClass():
     def sendVideo(self,chat_id, video, **kwargs):
         data = {
         'chat_id': chat_id,
-        'duration': kwargs.get('duration', None),
-        'caption': kwargs.get('caption', None),
-        'width': kwargs.get('width', None),
-        'height': kwargs.get('height', None),
+        'duration': kwargs.get('duration'),
+        'caption': kwargs.get('caption'),
+        'width': kwargs.get('width'),
+        'height': kwargs.get('height'),
         'disable_notification': kwargs.get('disable_notification', False),
-        'reply_to_message_id': kwargs.get('reply_to_message_id', None),
-        'reply_markup': kwargs.get('reply_markup', None)
+        'reply_to_message_id': kwargs.get('reply_to_message_id'),
+        'reply_markup': kwargs.get('reply_markup')
         }
         files= {
         'video': open(video, 'rb')
@@ -180,11 +179,11 @@ class TelBotClass():
     def sendVoice(self, chat_id, voice, **kwargs):
         data = {
         'chat_id': chat_id,
-        'caption': kwargs.get('caption', None),
-        'duration': kwargs.get('duration', None),
+        'caption': kwargs.get('caption'),
+        'duration': kwargs.get('duration'),
         'disable_notification': kwargs.get('disable_notification', False),
-        'reply_to_message_id': kwargs.get('reply_to_message_id', None),
-        'reply_markup': kwargs.get('reply_markup', None)
+        'reply_to_message_id': kwargs.get('reply_to_message_id'),
+        'reply_markup': kwargs.get('reply_markup')
         }
         files={
         'voice': open(voice, 'rb')
@@ -199,10 +198,10 @@ class TelBotClass():
         data = {
         'chat_id': chat_id,
         'duration': kwargs.get('duration', 10),
-        'length': kwargs.get('length', None),
+        'length': kwargs.get('length'),
         'disable_notification': kwargs.get('disable_notification', False),
-        'reply_to_message_id': kwargs.get('reply_to_message_id', None),
-        'reply_markup': kwargs.get('reply_markup', None)
+        'reply_to_message_id': kwargs.get('reply_to_message_id'),
+        'reply_markup': kwargs.get('reply_markup')
         }
         files = {
         'video_note': open(vnote, 'rb')
@@ -229,8 +228,8 @@ class TelBotClass():
         'longtitude': longtitude,
         'live_period': kwargs.get('live_period', 86400),
         'disable_notification': kwargs.get('disable_notification', False),
-        'reply_to_message_id': kwargs.get('reply_to_message_id', None),
-        'reply_markup': kwargs.get('reply_markup', None)
+        'reply_to_message_id': kwargs.get('reply_to_message_id'),
+        'reply_markup': kwargs.get('reply_markup')
         }
         response = self._make_request(method='post',
                                       method_name='/sendLocation',
@@ -260,10 +259,10 @@ class TelBotClass():
         'longtitude':longtitude,
         'title': title,
         'address': address,
-        'foursquare_id': kwargs.get('foursquare_id', None),
+        'foursquare_id': kwargs.get('foursquare_id'),
         'disable_notification': kwargs.get('disable_notification', False),
-        'reply_to_message_id': kwargs.get('reply_to_message_id', None),
-        'reply_markup': kwargs.get('reply_markup', None)
+        'reply_to_message_id': kwargs.get('reply_to_message_id'),
+        'reply_markup': kwargs.get('reply_markup')
         }
         response = self._make_request(method='post', method_name='sendVenue',
                                       data=data)
@@ -274,10 +273,10 @@ class TelBotClass():
         'chat_id': chat_id,
         'phone_number': phone_num,
         'first_name': first_name,
-        'last_name': kwargs.get('last_name', None),
+        'last_name': kwargs.get('last_name'),
         'disable_notification': kwargs.get('disable_notification', False),
-        'reply_to_message_id': kwargs.get('reply_to_message_id', None),
-        'reply_markup': kwargs.get('reply_markup', None)
+        'reply_to_message_id': kwargs.get('reply_to_message_id'),
+        'reply_markup': kwargs.get('reply_markup')
         }
         response = self._make_request(method='post', method_name='sendContact',
                                       data=data)
@@ -337,7 +336,7 @@ class TelBotClass():
         data = {
         'chat_id': chat_id,
         'user_id': user_id,
-        'until_date': kwargs.get('until_date', None),
+        'until_date': kwargs.get('until_date'),
         'can_send_messages': kwargs.get('can_send_messages', False),
         'can_send_media_messages': kwargs.get('can_send_media_messages', False),
         'can_send_other_messages': kwargs.get('can_send_other_messages', False),
@@ -503,10 +502,10 @@ class TelBotClass():
     def answerCallbackQuery(self, callback_query_id, **kwargs):
         data = {
         'callback_query_id': callback_query_id,
-        'text': kwargs.get('text', None),
-        'show_alert': kwargs.get('show_alert', None),
-        'url': kwargs.get('url', None),
-        'cache_time': kwargs.get('cache_time', None)
+        'text': kwargs.get('text'),
+        'show_alert': kwargs.get('show_alert'),
+        'url': kwargs.get('url'),
+        'cache_time': kwargs.get('cache_time')
         }
         response = self._make_request(method='post',
                                       method_name='/answerInlineQuery',
@@ -518,13 +517,13 @@ class TelBotClass():
 
     def editMessageText(self, text, **kwargs):
         data = {
-        'chat_id': kwargs.get('chat_id', None),
-        'message_id': kwargs.get('message_id', None),
-        'inline_message_id': kwargs.get('inline_message_id', None),
+        'chat_id': kwargs.get('chat_id'),
+        'message_id': kwargs.get('message_id'),
+        'inline_message_id': kwargs.get('inline_message_id'),
         'text': text,
-        'parse_mode': kwargs.get('parse_mode', None),
+        'parse_mode': kwargs.get('parse_mode'),
         'disable_web_page_preview': kwargs.get('disable_web_page_preview', False),
-        'reply_markup': kwargs.get('reply_markup', None)
+        'reply_markup': kwargs.get('reply_markup')
         }
         response = self._make_request(method='post',
                                       method_name='/editMessageText',
@@ -533,12 +532,12 @@ class TelBotClass():
 
     def editMessageCaption(self, **kwargs):
         data = {
-        'chat_id': kwargs.get('chat_id', None),
-        'message_id': kwargs.get('message_id', None),
-        'inline_message_id': kwargs.get('inline_message_id', None),
-        'caption': kwargs.get('caption', None),
-        'parse_mode': kwargs.get('parse_mode', None),
-        'reply_markup': kwargs.get('reply_markup', None)
+        'chat_id': kwargs.get('chat_id'),
+        'message_id': kwargs.get('message_id'),
+        'inline_message_id': kwargs.get('inline_message_id'),
+        'caption': kwargs.get('caption'),
+        'parse_mode': kwargs.get('parse_mode'),
+        'reply_markup': kwargs.get('reply_markup')
         }
         response = self._make_request(method='post',
                                       method_name='/editMessageCaption',
@@ -547,10 +546,10 @@ class TelBotClass():
 
     def editMessageReplyMarkup(self, **kwargs):
         data = {
-        'chat_id': kwargs.get('chat_id', None),
-        'message_id': kwargs.get('message_id', None),
-        'inline_message_id': kwargs.get('inline_message_id', None),
-        'reply_markup': kwargs.get('reply_markup', None)
+        'chat_id': kwargs.get('chat_id'),
+        'message_id': kwargs.get('message_id'),
+        'inline_message_id': kwargs.get('inline_message_id'),
+        'reply_markup': kwargs.get('reply_markup')
         }
         response = self._make_request(method='post',
                                       method_name='/editMessageReplyMarkup',

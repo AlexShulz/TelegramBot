@@ -138,22 +138,15 @@ class Message(JsonDec):
             options['forward_from'] = User.dejson(obj['forward_from'])
         if 'forward_from_chat' in obj:
             options['forward_from_chat'] = Chat.dejson(obj['forward_from_chat'])
-        if 'forward_from_message_id' in obj:
-            options['forward_from_message_id'] = obj.get('forward_from_message_id')
-        if 'forward_signature' in obj:
-            options['forward_signature'] = obj.get('forward_signature')
-        if 'forward_date' in obj:
-            options['forward_date'] = obj.get('forward_date')
+        options['forward_from_message_id'] = obj.get('forward_from_message_id')
+        options['forward_signature'] = obj.get('forward_signature')
+        options['forward_date'] = obj.get('forward_date')
         if 'reply_to_message' in obj:
             options['reply_to_message'] = Message.dejson(obj['reply_to_message'])
-        if 'edit_date' in obj:
-            options['edit_date'] = obj.get('edit_date')
-        if 'media_group_id' in obj:
-            options['media_group_id'] = obj.get('media_group_id')
-        if 'author_signature' in obj:
-            options['author_signature'] = obj.get('author_signature')
-        if 'text' in obj:
-            options['text'] = obj.get('text')
+        options['edit_date'] = obj.get('edit_date')
+        options['media_group_id'] = obj.get('media_group_id')
+        options['author_signature'] = obj.get('author_signature')
+        options['text'] = obj.get('text')
         if 'entities' in obj:
             options['entities'] = []
             for e in obj.get('entities'):
@@ -178,8 +171,7 @@ class Message(JsonDec):
             options['voice'] = Voice.dejson(obj['voice'])
         if 'video_note' in obj:
             options['video_note'] = VideoNote.dejson(obj['video_note'])
-        if 'caption' in obj:
-            options['caption'] = obj.get('caption')
+        options['caption'] = obj.get('caption')
         if 'contact' in obj:
             options['contact'] = Contact.dejson(obj['contact'])
         if 'location' in obj:
@@ -192,32 +184,24 @@ class Message(JsonDec):
                 options['new_chat_members'].append(User.dejson(nm))
         if 'left_chat_member' in obj:
             options['left_chat_member'] = User.dejson(obj['left_chat_member'])
-        if 'new_chat_title' in obj:
-            options['new_chat_title'] = obj.get('new_chat_title')
+        options['new_chat_title'] = obj.get('new_chat_title')
         if 'new_chat_photo' in obj:
             options['new_chat_photo'] = []
             for photo in obj.get('new_chat_photo'):
                 options['new_chat_photo'].append(PhotoSize.dejson(photo))
-        if 'delete_chat_photo' in obj:
-            options['delete_chat_photo'] = obj.get('delete_chat_photo')
-        if 'group_chat_created' in obj:
-            options['group_chat_created'] = obj.get('group_chat_created')
-        if 'supergroup_chat_created' in obj:
-            options['supergroup_chat_created'] = obj.get('supergroup_chat_created')
-        if 'channel_chat_created' in obj:
-            options['channel_chat_created'] = obj.get('channel_chat_created')
-        if 'migrate_to_chat_id' in obj:
-            options['migrate_to_chat_id'] = obj.get('migrate_to_chat_id')
-        if 'migrate_from_chat_id' in obj:
-            options['migrate_from_chat_id'] = obj.get('migrate_from_chat_id')
+        options['delete_chat_photo'] = obj.get('delete_chat_photo')
+        options['group_chat_created'] = obj.get('group_chat_created')
+        options['supergroup_chat_created'] = obj.get('supergroup_chat_created')
+        options['channel_chat_created'] = obj.get('channel_chat_created')
+        options['migrate_to_chat_id'] = obj.get('migrate_to_chat_id')
+        options['migrate_from_chat_id'] = obj.get('migrate_from_chat_id')
         if 'pinned_message' in obj:
             options['pinned_message'] = Message.dejson(obj['pinned_message'])
         if 'invoice' in obj:
             options['invoice'] = Invoice.dejson(obj['invoice'])
         if 'successful_payment' in obj:
             options['successful_payment'] = SuccessfulPayment.dejson(obj['successful_payment'])
-        if 'connected_website' in obj:
-            options['connected_website'] = obj.get('connected_website')
+        options['connected_website'] = obj.get('connected_website')
         return cls(message_id, from_user, date, chat, options)
 
     def __init__(self, message_id, from_user, date, chat, options):
@@ -539,7 +523,7 @@ class ReplyKeyboardMarkup(JsonEnc):
     Doc for class
     """
     def __init__(self, resize_keyboard=False, one_time_keyboard=False,
-                 selective=False, row_width=2):
+                 selective=False, row_width=3):
         self.resize_keyboard = resize_keyboard
         self.one_time_keyboard = one_time_keyboard
         self.selective = selective
@@ -547,10 +531,19 @@ class ReplyKeyboardMarkup(JsonEnc):
         self.keyboard = []
 
     def add_button(self, *args):
-        pass
-
-    def add_row(self, *args):
-        pass
+        row = []
+        for btn in args:
+            if type(btn) == str:
+                row.append({'text': btn})
+            elif type(btn) == dict:
+                row.append(btn)
+            else:
+                raise TypeError('buttons in args must be are strings.')
+            if (len(row) % self.row_width == 0):
+                self.keyboard.append(row)
+                row = []
+        if len(row) > 0:
+            self.keyboard.append(row)
 
     def enjson(self):
         jdict = {'keyboard': self.keyboard}
