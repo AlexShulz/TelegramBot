@@ -19,9 +19,9 @@ class JsonDec:
 
     @staticmethod
     def check_json(jtype):
-        if type(jtype) == dict:
+        if isinstance(jtype, dict):
             return jtype
-        elif type(jtype) == str:
+        elif isinstance(jtype, str):
             return json.loads(jtype)
         else:
             raise ValueError('jtype is not json dict or string type.')
@@ -533,12 +533,10 @@ class ReplyKeyboardMarkup(JsonEnc):
     def add_button(self, *args):
         row = []
         for btn in args:
-            if type(btn) == str:
-                row.append({'text': btn})
-            elif type(btn) == dict:
-                row.append(btn)
+            if isinstance(btn, KeyboardButton):
+                row.append(btn.enjson())
             else:
-                raise TypeError('buttons in args must be are strings.')
+                raise TypeError('The button in args must be a KeyboardButton instance.')
             if (len(row) % self.row_width == 0):
                 self.keyboard.append(row)
                 row = []
@@ -574,28 +572,249 @@ class KeyboardButton(JsonEnc):
         return json.dumps(jdict)
 
 
+class ReplyKeyboardRemove(JsonEnc):
+    """
+    Doc for ReplyKeyboardRemove class
+    """
+    def __init__(self, remove_keyboard=True, selective=False):
+        self.remove_keyboard= remove_keyboard
+        self.selective = selective
+
+    def enjson(self):
+        return json.dumps(self.__dict__)
+
+
 class InlineKeyboardMarkup(JsonEnc):
     """
     Doc for InlineKeyboardMarkup class
     """
-    def __init__(self):
-        pass
+    def __init__(self, row_width=3):
+        self.keyaboard=[]
+        self.row_width = row_width
+
+    def add_button(self, *args):
+        row = []
+        for btn in args:
+            if isinstance(btn, InlineKeyboardButton):
+                row.append(btn.enjson())
+            else:
+                raise TypeError('The button in args must be a InlineKeyboardButton instance.')
+            if (len(row) % self.row_width == 0):
+                self.keyboard.append(row)
+                row = []
+        if len(row) > 0:
+            self.keyboard.append(row)
+
+    def enjson(self):
+        jdict = {'inline_keyboard': self.keyaboard}
+        return json.dumps(jdict)
+
+
+class InlineKeyboardButton(JsonEnc):
+    """
+    """
+    def __init__(self, text, url=None, callback_data=None,
+                 switch_inline_query=None, switch_inline_query_current_chat=None,
+                 callback_game=None, pay=None):
+        self.text = text
+        self.url = url
+        self.callback_data = callback_data
+        self.switch_inline_query = switch_inline_query
+        self.switch_inline_query_current_chat = switch_inline_query_current_chat
+        self.callback_game = callback_game
+        self.pay = pay
+
+    def enjson(self):
+        return json.loads(self.__dict__)
+
+
+class CallbackQuery(JsonDec):
+    """
+    """
+    @classmethod
+    def dejson(cls, jtype):
+        obj = cls.check_json(jtype)
+        qid = obj['id']
+        from_user = User.dejson(obj['from'])
+        if 'message' in obj:
+            message = Message.dejson(obj['message'])
+        else:
+            message = None
+        inline_message_id = obj.get('inline_message_id')
+        chat_instance = obj['chat_instance']
+        data = obj.get('data')
+        game_short_name = obj.get('game_short_name')
+
+        return cls(qid, from_user, chat_instance, message, inline_message_id,
+                   data, game_short_name)
+
+
+    def __init__(self, qid, from_user, chat_instance, message=None,
+                 inline_message_id=None, data=None, game_short_name=None):
+        self.id = qid
+        self.user_from = user_from
+        self.chat_instance = chat_instance
+        self.message = message
+        self.inline_message_id = inline_message_id
+        self.data = data
+        self.game_short_name = game_short_name
+
+
+class ForceReply(JsonEnc):
+    """
+    """
+    def __init__(self, selective=False):
+        self.selective = selective
+
+    def enjson(self):
+        jdict['force_reply'] = True
+        jdict['selective'] = self.selective
+        return json.loads(jdict)
+
+
+class ChatPhoto(JsonDec):
+    """
+    """
+    @classmethod
+    def dejson(cls, jtype):
+        obj = cls.check_json(jtype)
+        small_file_id = obj['small_file_id']
+        big_file_id = obj['big_file_id']
+        return cls(small_file_id, big_file_id)
+
+    def __init__(self, small_file_id, big_file_id):
+        self.small_file_id = small_file_id
+        self.big_file_id = big_file_id
+
+
+class ChatMember(JsonDec):
+    """
+    Doc for ChatMember class
+    """
+    @classmethod
+    def dejson(cls, jtype):
+        obj = cls.check_json(jtype)
+        user = User.dejson(obj['user'])
+        status = obj['status']
+        until_date = obj.get('until_date')
+        can_be_edited = obj.get('can_be_edited')
+        can_change_info = obj.get('can_change_info')
+        can_post_messages = obj.get('can_post_messages')
+        can_edit_messages = obj.get('can_edit_messages')
+        can_delete_messages = obj.get('can_delete_messages')
+        can_invite_users = obj.get('can_invite_users')
+        can_restrict_members = obj.get('can_restrict_members')
+        can_pin_messages = obj.get('can_pin_messages')
+        can_promote_members = obj.get('can_promote_members')
+        can_send_messages = obj.get('can_send_messages')
+        can_send_media_messages = obj.get('can_send_media_messages')
+        can_send_other_messages = obj.get('can_send_other_messages')
+        can_add_web_page_previews = obj.get('can_add_web_page_previews')
+
+        return cls(user, status, until_date, can_be_edited, can_change_info,
+                   can_post_messages, can_edit_messages, can_delete_messages,
+                   can_invite_users, can_restrict_members, can_pin_messages,
+                   can_promote_members, can_send_messages, can_send_media_messages,
+                   can_send_other_messages, can_add_web_page_previews)
+
+    def __init__(self, user, status, until_date=None, can_be_edited=False,
+                 can_change_info=False, can_post_messages=False,
+                 can_edit_messages=False, can_delete_messages=False,
+                 can_invite_users=False, can_restrict_members=False,
+                 can_pin_messages=False, can_promote_members=False,
+                 can_send_messages=False, can_send_media_messages=False,
+                 can_send_other_messages=False, can_add_web_page_previews=False):
+        self.user = user
+        self.status = status
+        self.until_date = until_date
+        self.can_be_edited = can_be_edited
+        self.can_change_info = can_change_info
+        self.can_post_messages = can_post_messages
+        self.can_edit_messages = can_edit_messages
+        self.can_delete_messages = can_delete_messages
+        self.can_invite_users = can_invite_users
+        self.can_restrict_members = can_restrict_members
+        self.can_pin_messages = can_pin_messages
+        self.can_promote_members = can_promote_members
+        self.can_send_messages = can_send_messages
+        self.can_send_media_messages = can_send_media_messages
+        self.can_send_other_messages = can_send_other_messages
+        self.can_add_web_page_previews = can_add_web_page_previews
+
+
+class ResponseParameters(JsonDec):
+    """
+    Doc for ResponseParameters class
+    """
+    @classmethod
+    def dejson(cls, jtype):
+        obj = cls.check_json(jtype)
+        migrate_to_chat_id = obj.get('migrate_to_chat_id')
+        retry_after = obj.get('retry_after')
+        return cls(migrate_to_chat_id, retry_after)
+
+    def __init__(self, migrate_to_chat_id=None, retry_after=None):
+        self.migrate_to_chat_id = migrate_to_chat_id
+        self.retry_after = retry_after
+
+
+class InputMediaPhoto(JsonEnc):
+    """
+    """
+    def __init__(self, media, caption=None, parse_mode=None):
+        self.type = 'photo'
+        self.media = media
+        self.caption = caption
+        self.parse_mode = parse_mode
+
+    def enjson(self):
+        return json.loads(self.__dict__)
+
+
+class InputMediaVideo(JsonEnc):
+    """
+    """
+    def __init__(self, media, caption=None, parse_mode=None, width=None,
+                 height=None, duration=None, supports_streaming=None):
+        self.type = 'video'
+        self.media = media
+        self.caption = caption
+        self.parse_mode = parse_mode
+        self.width = width
+        self.height = height
+        self.duration = duration
+        self.supports_streaming = supports_streaming
+
+    def enjson(self):
+        return json.loads(self.__dict__)
+
+
+#InlineQuery types
 
 class InlineQuery(JsonDec):
     """
     """
-    def __init__(self):
-        pass
+    @classmethod
+    def dejson(cls, jtype):
+        obj = cls.check_json(jtype)
+        qid = obj['id']
+        user = User.dejson(obj['user'])
+        location = None
+        if 'location' in obj:
+            location = Location.dejson(obj['location'])
+        query = obj['query']
+        offset = obj['offset']
+        return cls(qid, user, location, query, offset)
+
+    def __init__(self, qid, user, location=None, query, offset):
+        self.id = qid
+        self.from_user = user
+        self.location = location
+        self.query = query
+        self.offset = offset
 
 
 class ChosenInlineResult(JsonDec):
-    """
-    """
-    def __init__(self):
-        pass
-
-
-class CallbackQuery(JsonDec):
     """
     """
     def __init__(self):

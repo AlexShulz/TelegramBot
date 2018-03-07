@@ -508,12 +508,24 @@ class TelBotClass():
         'cache_time': kwargs.get('cache_time')
         }
         response = self._make_request(method='post',
-                                      method_name='/answerInlineQuery',
+                                      method_name='/answerCallbackQuery',
                                       data=data)
         return response
 
     def answerInlineQuery(inline_query_id, results, **kwargs):
-        pass
+        data = {
+        'inline_query_id': inline_query_id,
+        'results': results,
+        'cache_time': kwargs.get('cache_time'),
+        'is_personal': kwargs.get('is_personal'),
+        'next_offset': kwargs.get('next_offset'),
+        'switch_pm_text': kwargs.get('switch_pm_text'),
+        'switch_pm_parameter': kwargs.get('switch_pm_parameter')
+        }
+        response = self._make_request(method='post',
+                                      method_name='/answerInlineQuery',
+                                      data=data)
+        return response
 
     def editMessageText(self, text, **kwargs):
         data = {
