@@ -498,7 +498,13 @@ class UserProfilePhotos(JsonDec):
     @classmethod
     def dejson(cls, jtype):
         obj = cls.check_json(jtype)
+        total_count = obj['total_count']
+        photos = [[PhotoSize.dejson(i) for i in j] for j in obj['photos']]
+        return cls(total_count, Photos)
 
+    def __init__(self, total_count, photos):
+        self.total_count = total_count
+        self.photos = photoss
 
 
 class File(JsonDec):
@@ -534,7 +540,7 @@ class ReplyKeyboardMarkup(JsonEnc):
         row = []
         for btn in args:
             if isinstance(btn, KeyboardButton):
-                row.append(btn.enjson())
+                row.append(btn.to_dict())
             else:
                 raise TypeError('The button in args must be a KeyboardButton instance.')
             if (len(row) % self.row_width == 0):
@@ -564,12 +570,10 @@ class KeyboardButton(JsonEnc):
         self.request_location = request_location
 
     def enjson(self):
-        jdict = {'text': self.text}
-        if self.request_contact:
-            jdict['request_contact'] = self.request_contact
-        if self.request_location:
-            jdict['request_location'] = self.request_location
-        return json.dumps(jdict)
+        return json.dumps(self.__dict__)
+
+    def to_dict(self):
+        return self.__dict__
 
 
 class ReplyKeyboardRemove(JsonEnc):
@@ -589,14 +593,14 @@ class InlineKeyboardMarkup(JsonEnc):
     Doc for InlineKeyboardMarkup class
     """
     def __init__(self, row_width=3):
-        self.keyaboard=[]
+        self.keyboard=[]
         self.row_width = row_width
 
     def add_button(self, *args):
         row = []
         for btn in args:
             if isinstance(btn, InlineKeyboardButton):
-                row.append(btn.enjson())
+                row.append(btn.to_dict())
             else:
                 raise TypeError('The button in args must be a InlineKeyboardButton instance.')
             if (len(row) % self.row_width == 0):
@@ -606,7 +610,7 @@ class InlineKeyboardMarkup(JsonEnc):
             self.keyboard.append(row)
 
     def enjson(self):
-        jdict = {'inline_keyboard': self.keyaboard}
+        jdict = {'inline_keyboard': self.keyboard}
         return json.dumps(jdict)
 
 
@@ -626,6 +630,9 @@ class InlineKeyboardButton(JsonEnc):
 
     def enjson(self):
         return json.loads(self.__dict__)
+
+    def to_dict(self):
+        return self.__dict__
 
 
 class CallbackQuery(JsonDec):
@@ -789,7 +796,7 @@ class InputMediaVideo(JsonEnc):
         return json.loads(self.__dict__)
 
 
-#InlineQuery types
+#Inline types
 
 class InlineQuery(JsonDec):
     """
@@ -804,9 +811,9 @@ class InlineQuery(JsonDec):
             location = Location.dejson(obj['location'])
         query = obj['query']
         offset = obj['offset']
-        return cls(qid, user, location, query, offset)
+        return cls(qid, user, query, offset, location)
 
-    def __init__(self, qid, user, location=None, query, offset):
+    def __init__(self, qid, user, query, offset, location=None):
         self.id = qid
         self.from_user = user
         self.location = location
