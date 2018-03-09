@@ -498,7 +498,13 @@ class UserProfilePhotos(JsonDec):
     @classmethod
     def dejson(cls, jtype):
         obj = cls.check_json(jtype)
+        total_count = obj['total_count']
+        photos = [[PhotoSize.dejson(i) for i in j] for j in obj['photos']]
+        return cls(total_count, Photos)
 
+    def __init__(self, total_count, photos):
+        self.total_count = total_count
+        self.photos = photoss
 
 
 class File(JsonDec):
@@ -789,7 +795,7 @@ class InputMediaVideo(JsonEnc):
         return json.loads(self.__dict__)
 
 
-#InlineQuery types
+#Inline types
 
 class InlineQuery(JsonDec):
     """
