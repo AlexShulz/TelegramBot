@@ -1,6 +1,9 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+""" Telegram Message Types.
+
+There are all classes that emplements Telegram messages and other objects.
+"""
 import json
+
 
 class JsonEnc:
     """
@@ -44,7 +47,9 @@ class WebHookInfo(JsonDec):
         return cls(url, has_custom_certificate, pending_update_count,
                    last_error_date, last_error_message, max_connections,
                    allowed_updates)
-    def __init__(self, url, has_custom_certificate, pending_update_count,
+
+    def __init__(self, url, has_custom_certificate=False,
+                 pending_update_count=None,
                  last_error_date=None, last_error_message=None,
                  max_connections=None, allowed_updates=[]):
         self.url = url
@@ -85,7 +90,8 @@ class Update(JsonDec):
         else:
             inline_query = None
         if 'chosen_inline_result' in obj:
-            chosen_inline_result = ChosenInlineResult.dejson(obj['chosen_inline_result'])
+            chosen_inline_result = ChosenInlineResult.dejson(
+                                       obj['chosen_inline_result'])
         else:
             chosen_inline_result = None
         if 'callback_query' in obj:
@@ -97,7 +103,8 @@ class Update(JsonDec):
         else:
             shipping_query = None
         if 'pre_checkout_query' in obj:
-            pre_checkout_query = PreCheckoutQuery.dejson(obj['pre_checkout_query'])
+            pre_checkout_query = PreCheckoutQuery.dejson(
+                                     obj['pre_checkout_query'])
         else:
             pre_checkout_query = None
         return cls(update_id, message, edited_message, chanel_post,
@@ -113,7 +120,7 @@ class Update(JsonDec):
         self.chanel_post = chanel_post
         self.edited_chanel_post = edited_chanel_post
         self.inline_query = inline_query
-        self.chosen_inline_result =chosen_inline_result
+        self.chosen_inline_result = chosen_inline_result
         self.callback_query = callback_query
         self.shipping_query = shipping_query
         self.pre_checkout_query = pre_checkout_query
@@ -137,12 +144,14 @@ class Message(JsonDec):
         if 'forward_from' in obj:
             options['forward_from'] = User.dejson(obj['forward_from'])
         if 'forward_from_chat' in obj:
-            options['forward_from_chat'] = Chat.dejson(obj['forward_from_chat'])
+            options['forward_from_chat'] = Chat.dejson(
+                                               obj['forward_from_chat'])
         options['forward_from_message_id'] = obj.get('forward_from_message_id')
         options['forward_signature'] = obj.get('forward_signature')
         options['forward_date'] = obj.get('forward_date')
         if 'reply_to_message' in obj:
-            options['reply_to_message'] = Message.dejson(obj['reply_to_message'])
+            options['reply_to_message'] = Message.dejson(
+                                              obj['reply_to_message'])
         options['edit_date'] = obj.get('edit_date')
         options['media_group_id'] = obj.get('media_group_id')
         options['author_signature'] = obj.get('author_signature')
@@ -200,7 +209,8 @@ class Message(JsonDec):
         if 'invoice' in obj:
             options['invoice'] = Invoice.dejson(obj['invoice'])
         if 'successful_payment' in obj:
-            options['successful_payment'] = SuccessfulPayment.dejson(obj['successful_payment'])
+            options['successful_payment'] = SuccessfulPayment.dejson(
+                                                obj['successful_payment'])
         options['connected_website'] = obj.get('connected_website')
         return cls(message_id, from_user, date, chat, options)
 
@@ -230,13 +240,13 @@ class MessageEntity(JsonDec):
             user = User.dejson(obj['user'])
         return cls(ent_type, offset, length, url, user)
 
-
     def __init__(self, etype, offset, length, url=None, user=None):
         self.type = etype
         self.offset = offset
         self.length = length
         self.url = url
         self.user = user
+
 
 class User(JsonDec):
     """
@@ -253,7 +263,8 @@ class User(JsonDec):
         language_code = obj['language_code']
         return cls(uid, is_bot, first_name, last_name, username, language_code)
 
-    def __init__(self, uid, is_bot, fname, lname=None, username=None, lang_code=None):
+    def __init__(self, uid, is_bot, fname, lname=None, username=None,
+                 lang_code=None):
         self.id = uid
         self.is_bot = is_bot
         self.first_name = fname
@@ -292,9 +303,10 @@ class Chat(JsonDec):
                    can_set_sticker_set)
 
     def __init__(self, id, type, title=None, username=None, first_name=None,
-                 last_name=None,all_members_are_administrators=None, photo=None,
-                 description=None, invite_link=None, pinned_message=None,
-                 sticker_set_name=None, can_set_sticker_set=None):
+                 last_name=None, all_members_are_administrators=None,
+                 photo=None, description=None, invite_link=None,
+                 pinned_message=None, sticker_set_name=None,
+                 can_set_sticker_set=None):
         self.id = id
         self.type = type
         self.title = title
@@ -408,7 +420,6 @@ class Video(JsonDec):
         self.thumb = thumb
         self.mime_type = mime_type
         self.file_size = file_size
-
 
 
 class Voice(JsonDec):
@@ -581,7 +592,7 @@ class ReplyKeyboardRemove(JsonEnc):
     Doc for ReplyKeyboardRemove class
     """
     def __init__(self, remove_keyboard=True, selective=False):
-        self.remove_keyboard= remove_keyboard
+        self.remove_keyboard = remove_keyboard
         self.selective = selective
 
     def enjson(self):
@@ -593,7 +604,7 @@ class InlineKeyboardMarkup(JsonEnc):
     Doc for InlineKeyboardMarkup class
     """
     def __init__(self, row_width=3):
-        self.keyboard=[]
+        self.keyboard = list()
         self.row_width = row_width
 
     def add_button(self, *args):
@@ -618,7 +629,8 @@ class InlineKeyboardButton(JsonEnc):
     """
     """
     def __init__(self, text, url=None, callback_data=None,
-                 switch_inline_query=None, switch_inline_query_current_chat=None,
+                 switch_inline_query=None,
+                 switch_inline_query_current_chat=None,
                  callback_game=None, pay=None):
         self.text = text
         self.url = url
@@ -654,7 +666,6 @@ class CallbackQuery(JsonDec):
 
         return cls(qid, from_user, chat_instance, message, inline_message_id,
                    data, game_short_name)
-
 
     def __init__(self, qid, from_user, chat_instance, message=None,
                  inline_message_id=None, data=None, game_short_name=None):
@@ -721,8 +732,9 @@ class ChatMember(JsonDec):
         return cls(user, status, until_date, can_be_edited, can_change_info,
                    can_post_messages, can_edit_messages, can_delete_messages,
                    can_invite_users, can_restrict_members, can_pin_messages,
-                   can_promote_members, can_send_messages, can_send_media_messages,
-                   can_send_other_messages, can_add_web_page_previews)
+                   can_promote_members, can_send_messages,
+                   can_send_media_messages, can_send_other_messages,
+                   can_add_web_page_previews)
 
     def __init__(self, user, status, until_date=None, can_be_edited=False,
                  can_change_info=False, can_post_messages=False,
@@ -730,7 +742,8 @@ class ChatMember(JsonDec):
                  can_invite_users=False, can_restrict_members=False,
                  can_pin_messages=False, can_promote_members=False,
                  can_send_messages=False, can_send_media_messages=False,
-                 can_send_other_messages=False, can_add_web_page_previews=False):
+                 can_send_other_messages=False,
+                 can_add_web_page_previews=False):
         self.user = user
         self.status = status
         self.until_date = until_date
@@ -796,8 +809,7 @@ class InputMediaVideo(JsonEnc):
         return json.loads(self.__dict__)
 
 
-#Inline types
-
+# Inline types
 class InlineQuery(JsonDec):
     """
     """
