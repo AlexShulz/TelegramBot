@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-setup(name='teleBot',
+setup(name='telegbot',
       version='0.1',
       description='Python API to manage Telegram bot',
       keywords='',
@@ -10,6 +10,6 @@ setup(name='teleBot',
       license='GPL v3.0',
       packages=find_packages(),
       install_requires=[
-          'requests==2.18.4',
+          'requests==2.22.0',
       ],
 )
